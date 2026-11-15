@@ -1,0 +1,25 @@
+{
+  "appId": "com.sahaball.game",
+  "appName": "SahaBall",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true,
+      "style": "DARK"
+    },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "backgroundColor": "#114224",
+      "showSpinner": false
+    }
+  }
+}

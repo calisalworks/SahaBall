@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#118C4F" />
+      <stop offset="100%" stop-color="#0B2545" />
+    </linearGradient>
+    <radialGradient id="ballGrad" cx="38%" cy="34%" r="65%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#94A3B8" />
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <circle cx="256" cy="256" r="190" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="6" />
+  <line x1="66" y1="256" x2="446" y2="256" stroke="rgba(255,255,255,0.18)" stroke-width="5" />
+  <circle cx="256" cy="256" r="120" fill="url(#ballGrad)" stroke="#0F172A" stroke-width="8" />
+  <polygon points="256,192 298,223 282,272 230,272 214,223" fill="#0F172A" />
+  <polygon points="256,138 282,162 256,192 230,162" fill="#0F172A" />
+  <polygon points="355,212 332,248 298,223 312,182" fill="#0F172A" />
+  <polygon points="157,212 200,182 214,223 180,248" fill="#0F172A" />
+  <polygon points="326,338 282,324 282,272 332,278" fill="#0F172A" />
+  <polygon points="186,338 180,278 230,272 230,324" fill="#0F172A" />
+  <line x1="256" y1="192" x2="256" y2="162" stroke="#0F172A" stroke-width="6" />
+  <line x1="298" y1="223" x2="332" y2="248" stroke="#0F172A" stroke-width="6" />
+  <line x1="214" y1="223" x2="180" y2="248" stroke="#0F172A" stroke-width="6" />
+  <line x1="282" y1="272" x2="310" y2="312" stroke="#0F172A" stroke-width="6" />
+  <line x1="230" y1="272" x2="202" y2="312" stroke="#0F172A" stroke-width="6" />
+</svg>
