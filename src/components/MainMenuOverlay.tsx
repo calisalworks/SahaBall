@@ -433,7 +433,7 @@ export const MainMenuOverlay: React.FC<MainMenuOverlayProps> = ({
                     Çevrimiçi
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                    Oda kur veya kod ile katıl, lobide sohbet et, mevki seç ve çevrimiçi oyuncularla karşılaş.
+                    Oda kur veya kod ile katıl, lobide sohbet et ve çevrimiçi oyuncularla normal maç yap.
                   </p>
                 </div>
               </button>
@@ -722,42 +722,6 @@ export const MainMenuOverlay: React.FC<MainMenuOverlayProps> = ({
               {/* Col 1: Room Setup */}
               <div className="col-span-5 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[#FAF4E8] border border-[#E5DEC9] flex flex-col justify-between gap-1.5 min-h-0">
                 <div className="space-y-1.5 min-h-0">
-                  <div className="grid grid-cols-3 gap-0.5 sm:gap-1 p-0.5 rounded-lg sm:rounded-xl bg-white/90 border border-[#E5DEC9]">
-                    <button
-                      type="button"
-                      onClick={() => onChangeOnlineGameType('single')}
-                      className={`min-h-[26px] sm:min-h-[32px] rounded-md sm:rounded-lg text-[10px] sm:text-[11px] font-display font-bold transition-colors whitespace-nowrap cursor-pointer ${
-                        onlineGameType === 'single' ? 'bg-[#0B2545] text-white' : 'text-slate-700'
-                      }`}
-                    >
-                      Normal Maç
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onChangeOnlineGameType('tournament')}
-                      className={`min-h-[26px] sm:min-h-[32px] rounded-md sm:rounded-lg text-[10px] sm:text-[11px] font-display font-bold transition-colors flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap cursor-pointer ${
-                        onlineGameType === 'tournament'
-                          ? 'bg-amber-400 text-slate-950'
-                          : 'text-slate-700'
-                      }`}
-                    >
-                      <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
-                      <span>Turnuva</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onChangeOnlineGameType('league')}
-                      className={`min-h-[26px] sm:min-h-[32px] rounded-md sm:rounded-lg text-[10px] sm:text-[11px] font-display font-bold transition-colors flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap cursor-pointer ${
-                        onlineGameType === 'league'
-                          ? 'bg-[#118C4F] text-white'
-                          : 'text-slate-700'
-                      }`}
-                    >
-                      <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 shrink-0" />
-                      <span>Lig</span>
-                    </button>
-                  </div>
-
                   {/* Clickable Setting Cards */}
                   <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
                     <button
@@ -799,9 +763,9 @@ export const MainMenuOverlay: React.FC<MainMenuOverlayProps> = ({
                       className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white hover:bg-slate-50 border border-[#E5DEC9] text-left cursor-pointer"
                     >
                       <div className="text-[9px] sm:text-[10px] font-bold text-slate-500 truncate">
-                        {onlineGameType === 'single' ? 'Takımlar & Renk' : 'Takımım & Rengim'}
+                        Takımlar & Renk
                       </div>
-                      {onlineGameType === 'single' ? (
+                      {true ? (
                         <div className="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#0B2545] truncate mt-0.5 leading-tight">
                           <span
                             style={{ backgroundColor: redTheme.hex }}
@@ -833,17 +797,17 @@ export const MainMenuOverlay: React.FC<MainMenuOverlayProps> = ({
                       <div className="text-[9px] sm:text-[10px] font-bold text-slate-500">Botlar</div>
                       <div className="text-[11px] sm:text-xs font-bold text-[#0B2545] truncate mt-0.5 leading-tight">
                         {BOT_DIFFICULTY_LABELS[defaultBotDifficulty].label}
-                        {onlineGameType === 'single' ? ` · ${clampedRedBots}+${clampedBlueBots}` : ''}
+                        {` · ${clampedRedBots}+${clampedBlueBots}`}
                       </div>
                     </button>
                   </div>
 
-                  {onlineGameType === 'tournament' && (
+                  {false && onlineGameType === 'tournament' && (
                     <div className="px-2 py-1 rounded-lg bg-amber-50 border border-amber-300 text-[9.5px] sm:text-[11px] font-semibold text-amber-900 truncate">
                       32 Takım · 1. +150 Jeton · 2. +75 Jeton
                     </div>
                   )}
-                  {onlineGameType === 'league' && (
+                  {false && onlineGameType === 'league' && (
                     <div className="px-2 py-1 rounded-lg bg-emerald-50 border border-emerald-300 text-[9.5px] sm:text-[11px] font-semibold text-emerald-900 truncate">
                       18 Takım · 1. +150 · 2. +50 · 3. +25 Jeton
                     </div>
@@ -854,25 +818,11 @@ export const MainMenuOverlay: React.FC<MainMenuOverlayProps> = ({
                   type="button"
                   disabled={!wsConnected}
                   onClick={onCreateRoom}
-                  className={`w-full min-h-[34px] sm:min-h-[42px] px-2.5 rounded-xl disabled:opacity-50 font-display font-bold text-[11px] sm:text-sm flex items-center justify-center gap-1.5 shadow-sm transition-colors whitespace-nowrap cursor-pointer ${
-                    onlineGameType === 'tournament'
-                      ? 'bg-amber-400 hover:bg-amber-300 text-slate-950'
-                      : 'bg-[#118C4F] hover:bg-[#0E7943] text-white'
-                  }`}
+                  className="w-full min-h-[34px] sm:min-h-[42px] px-2.5 rounded-xl disabled:opacity-50 bg-[#118C4F] hover:bg-[#0E7943] text-white font-display font-bold text-[11px] sm:text-sm flex items-center justify-center gap-1.5 shadow-sm transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  {onlineGameType !== 'single' ? (
-                    <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                  ) : (
-                    <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                  )}
+                  <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                   <span className="truncate">
-                    {!wsConnected
-                      ? 'Bağlanıyor...'
-                      : onlineGameType === 'tournament'
-                        ? `Turnuva Odası Kur (32T · ${selectedMode})`
-                        : onlineGameType === 'league'
-                          ? `Lig Odası Kur (18T · ${selectedMode})`
-                          : `Oda Kur (${selectedMode})`}
+                    {!wsConnected ? 'Bağlanıyor...' : `Oda Kur (${selectedMode})`}
                   </span>
                 </button>
               </div>
