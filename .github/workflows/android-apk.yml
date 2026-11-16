@@ -191,24 +191,24 @@ jobs:
           text = gradle.read_text()
 
           # Locate the Android buildTypes block, preserving the generated template.
-          match = re.search(r"(?m)^(\\s*)buildTypes\\s*\\{", text)
+          match = re.search(r"(?m)^(\s*)buildTypes\s*\{", text)
           if not match:
               raise SystemExit("Could not find android buildTypes block")
 
           indent = match.group(1)
           signing = (
-              f"{indent}signingConfigs {{\\n"
-              f"{indent}    stableDebug {{\\n"
-              f"{indent}        storeFile file('sahaball-upload-key.jks')\\n"
-              f"{indent}        storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')\\n"
-              f"{indent}        keyAlias System.getenv('ANDROID_KEY_ALIAS')\\n"
-              f"{indent}        keyPassword System.getenv('ANDROID_KEY_PASSWORD')\\n"
-              f"{indent}    }}\\n"
-              f"{indent}}}\\n\\n"
+              f"{indent}signingConfigs {{\n"
+              f"{indent}    stableDebug {{\n"
+              f"{indent}        storeFile file('sahaball-upload-key.jks')\n"
+              f"{indent}        storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')\n"
+              f"{indent}        keyAlias System.getenv('ANDROID_KEY_ALIAS')\n"
+              f"{indent}        keyPassword System.getenv('ANDROID_KEY_PASSWORD')\n"
+              f"{indent}    }}\n"
+              f"{indent}}}\n\n"
           )
           if "signingConfigs" not in text or "stableDebug" not in text:
               text = text[:match.start()] + signing + text[match.start():]
-              match = re.search(r"(?m)^(\\s*)buildTypes\\s*\\{", text)
+              match = re.search(r"(?m)^(\s*)buildTypes\s*\{", text)
 
           # Find the matching closing brace for buildTypes.
           open_brace = text.find("{", match.start())
@@ -226,7 +226,7 @@ jobs:
               raise SystemExit("Could not parse android buildTypes block")
 
           body = text[open_brace + 1:close_brace]
-          debug_match = re.search(r"(?m)^(\\s*)debug\\s*\\{", body)
+          debug_match = re.search(r"(?m)^(\s*)debug\s*\{", body)
           if debug_match:
               # Reuse an existing debug block and force it to use the stable key.
               debug_indent = debug_match.group(1)
@@ -245,21 +245,21 @@ jobs:
                   raise SystemExit("Could not parse debug buildType block")
               debug_body = text[debug_open + 1:debug_close]
               debug_body = re.sub(
-                  r"(?m)^\\s*signingConfig\\s+.*$\\n?",
+                  r"(?m)^\s*signingConfig\s+.*$\n?",
                   "",
                   debug_body,
               )
               debug_body = (
-                  "\\n" + debug_indent +
-                  "    signingConfig signingConfigs.stableDebug\\n" +
+                  "\n" + debug_indent +
+                  "    signingConfig signingConfigs.stableDebug\n" +
                   debug_body
               )
               text = text[:debug_open + 1] + debug_body + text[debug_close:]
           else:
               debug_block = (
-                  f"\\n{indent}    debug {{\\n"
-                  f"{indent}        signingConfig signingConfigs.stableDebug\\n"
-                  f"{indent}    }}\\n"
+                  f"\n{indent}    debug {{\n"
+                  f"{indent}        signingConfig signingConfigs.stableDebug\n"
+                  f"{indent}    }}\n"
               )
               text = text[:open_brace + 1] + debug_block + text[open_brace + 1:]
 
@@ -268,7 +268,7 @@ jobs:
           # Guard against a silent no-op in the Gradle patch.
           check = gradle.read_text()
           if "stableDebug" not in check or not re.search(
-              r"debug\\s*\\{[^}]*signingConfig\\s+signingConfigs\\.stableDebug",
+              r"debug\s*\{[^}]*signingConfig\s+signingConfigs\.stableDebug",
               check,
               re.S,
           ):
