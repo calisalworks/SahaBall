@@ -179,103 +179,43 @@ jobs:
 
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/sahaball-upload-key.jks
 
-          # Fail early if the supplied keystore or alias is invalid.
           keytool -list -keystore android/app/sahaball-upload-key.jks \
             -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
 
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
           gradle = Path("android/app/build.gradle")
           text = gradle.read_text()
-
-          # Locate the Android buildTypes block, preserving the generated template.
-          match = re.search(r"(?m)^([ \t]*)buildTypes\s*\{", text)
-          if not match:
+          marker = "    buildTypes {"
+          if marker not in text:
               raise SystemExit("Could not find android buildTypes block")
+          if "stableDebug" in text:
+              raise SystemExit("Unexpected pre-existing stableDebug config in generated Gradle file")
 
-          indent = match.group(1)
-          signing = (
-              f"{indent}signingConfigs {{\n"
-              f"{indent}    stableDebug {{\n"
-              f"{indent}        storeFile file('sahaball-upload-key.jks')\n"
-              f"{indent}        storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')\n"
-              f"{indent}        keyAlias System.getenv('ANDROID_KEY_ALIAS')\n"
-              f"{indent}        keyPassword System.getenv('ANDROID_KEY_PASSWORD')\n"
-              f"{indent}    }}\n"
-              f"{indent}}}\n\n"
-          )
-          if "signingConfigs" not in text or "stableDebug" not in text:
-              text = text[:match.start()] + signing + text[match.start():]
-              match = re.search(r"(?m)^([ \t]*)buildTypes\s*\{", text)
+          config = """    signingConfigs {
+                  stableDebug {
+                      storeFile file('sahaball-upload-key.jks')
+                      storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                      keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                      keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+                  }
+              }
 
-          # Find the matching closing brace for buildTypes.
-          open_brace = text.find("{", match.start())
-          depth = 0
-          close_brace = None
-          for i in range(open_brace, len(text)):
-              if text[i] == "{":
-                  depth += 1
-              elif text[i] == "}":
-                  depth -= 1
-                  if depth == 0:
-                      close_brace = i
-                      break
-          if close_brace is None:
-              raise SystemExit("Could not parse android buildTypes block")
-
-          body = text[open_brace + 1:close_brace]
-          debug_match = re.search(r"(?m)^([ \t]*)debug\s*\{", body)
-          if debug_match:
-              # Reuse an existing debug block and force it to use the stable key.
-              debug_indent = debug_match.group(1)
-              debug_open = open_brace + 1 + debug_match.end() - 1
-              depth = 0
-              debug_close = None
-              for i in range(debug_open, close_brace):
-                  if text[i] == "{":
-                      depth += 1
-                  elif text[i] == "}":
-                      depth -= 1
-                      if depth == 0:
-                          debug_close = i
-                          break
-              if debug_close is None:
-                  raise SystemExit("Could not parse debug buildType block")
-              debug_body = text[debug_open + 1:debug_close]
-              debug_body = re.sub(
-                  r"(?m)^[ \t]*signingConfig\s+.*$\n?",
-                  "",
-                  debug_body,
-              )
-              debug_body = (
-                  "\n" + debug_indent +
-                  "    signingConfig signingConfigs.stableDebug\n" +
-                  debug_body
-              )
-              text = text[:debug_open + 1] + debug_body + text[debug_close:]
-          else:
-              debug_block = (
-                  f"\n{indent}    debug {{\n"
-                  f"{indent}        signingConfig signingConfigs.stableDebug\n"
-                  f"{indent}    }}\n"
-              )
-              text = text[:open_brace + 1] + debug_block + text[open_brace + 1:]
-
+              buildTypes {
+                  debug {
+                      signingConfig signingConfigs.stableDebug
+                  }
+          """
+          text = text.replace(marker, config, 1)
           gradle.write_text(text)
 
-          # Guard against a silent no-op in the Gradle patch.
           check = gradle.read_text()
-          if "stableDebug" not in check or not re.search(
-              r"debug\s*\{[^}]*signingConfig\s+signingConfigs\.stableDebug",
-              check,
-              re.S,
-          ):
-              raise SystemExit("Stable debug signing was not attached to debug buildType")
+          if "signingConfig signingConfigs.stableDebug" not in check:
+              raise SystemExit("Stable keystore was not assigned to debug buildType")
           PY
 
-            - name: Build debug APK
+      - name: Build debug APK
         run: |
           cd android
           ./gradlew assembleDebug
