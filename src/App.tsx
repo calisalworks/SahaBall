@@ -231,10 +231,12 @@ export default function App() {
   });
   const [coins, setCoins] = useState<number>(() => {
     try {
-      const saved = Number(localStorage.getItem('sahaball_coins'));
-      return Number.isFinite(saved) && saved >= 0 ? saved : 50;
+      const storedCoins = localStorage.getItem('sahaball_coins');
+      if (storedCoins === null) return 30;
+      const saved = Number(storedCoins);
+      return Number.isFinite(saved) && saved >= 0 ? saved : 30;
     } catch {
-      return 50;
+      return 30;
     }
   });
   const [profile, setProfile] = useState<ProfileData>(() => loadProfile());
@@ -2195,7 +2197,7 @@ export default function App() {
             mode={hudState.mode}
             teamMeta={hudState.teamMeta}
             isMuted={isMuted}
-            roomCode={playType === 'online' ? roomState?.roomCode : null}
+            roomCode={null}
             pingMs={playType === 'online' ? pingMs : null}
             canSendEmoji={localMemberTeam !== 'spec'}
             activeTactic={
