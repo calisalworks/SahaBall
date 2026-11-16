@@ -1,9 +1,10 @@
-name: SahaBall Android Test APK
+name: SahaBall Android APK
 
 on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - main_test
 
 permissions:
@@ -13,10 +14,10 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main_test
+      - name: Checkout selected branch
         uses: actions/checkout@v4
         with:
-          ref: main_test
+          ref: ${{ github.ref }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -106,12 +107,12 @@ jobs:
                   }
               }
           }
-          """.replace("\n          ", "\n"))
+          """.replace("\\n          ", "\\n"))
 
           manifest = root / "AndroidManifest.xml"
           text = manifest.read_text()
           text = re.sub(
-              r'(<activity\b[^>]*android:name="[^"]*MainActivity"[^>]*)(>)',
+              r'(<activity\\b[^>]*android:name="[^"]*MainActivity"[^>]*)(>)',
               lambda m: m.group(1) + ' android:screenOrientation="landscape" android:windowSoftInputMode="adjustResize"' + m.group(2)
                   if 'android:screenOrientation=' not in m.group(1) else re.sub(r'android:windowSoftInputMode="[^"]*"', 'android:windowSoftInputMode="adjustResize"', m.group(1)) + m.group(2),
               text,
@@ -120,10 +121,15 @@ jobs:
           manifest.write_text(text)
           PY
 
-      - name: Build debug APK
+      - name: Report Android signing fingerprints
         run: |
           cd android
           chmod +x gradlew
+          ./gradlew signingReport
+
+      - name: Build debug APK
+        run: |
+          cd android
           ./gradlew assembleDebug
 
       - name: Upload test APK
