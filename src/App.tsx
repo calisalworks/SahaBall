@@ -2155,7 +2155,6 @@ export default function App() {
             onSwitchTournamentSlot={(slotIndex) =>
               sendWs({ type: 'switch_tournament_slot', slotIndex })
             }
-            onChangeRole={(r) => sendWs({ type: 'set_role', role: r })}
             onToggleReady={(ready) => sendWs({ type: 'set_ready', ready })}
             onWatchLobbyAd={() => {
               sendWs({ type: 'set_watching_ad', watching: true });
