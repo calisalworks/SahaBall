@@ -20,14 +20,12 @@ import {
   DEFAULT_TEAM_META,
   MODE_CONFIGS,
   PITCH_SIZE_LABELS,
-  ROLE_LABELS,
   TEAM_COLOR_PALETTE,
 } from '../game/types';
 import type {
   BotDifficulty,
   GameMode,
   PitchSize,
-  PlayerRole,
   RoomGameType,
   RoomStateInfo,
   Team,
@@ -43,7 +41,6 @@ interface LobbyOverlayProps {
   coins: number;
   onSwitchTeam: (team: Team) => void;
   onSwitchTournamentSlot: (slotIndex: number) => void;
-  onChangeRole: (role: PlayerRole) => void;
   onToggleReady: (ready: boolean) => void;
   onWatchLobbyAd: () => void;
   onKickMember: (targetId: string) => void;
@@ -65,7 +62,6 @@ interface LobbyOverlayProps {
   onLeaveRoom: () => void;
 }
 
-const ROLES: PlayerRole[] = ['kaleci', 'defans', 'ortasaha', 'forvet'];
 const ONLINE_ENTRY_FEE = 10;
 
 export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
@@ -74,7 +70,6 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
   coins,
   onSwitchTeam,
   onSwitchTournamentSlot,
-  onChangeRole,
   onToggleReady,
   onWatchLobbyAd,
   onKickMember,
