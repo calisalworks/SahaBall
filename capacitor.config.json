@@ -1,5 +1,5 @@
 {
-  "appId": "com.sahaball.game",
+  "appId": "com.calisalworks.sahaball",
   "appName": "SahaBall",
   "webDir": "dist",
   "bundledWebRuntime": false,

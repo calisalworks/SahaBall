@@ -1,4 +1,4 @@
-package com.sahaball.game
+package com.calisalworks.sahaball
 
 import android.os.Build
 import android.os.Bundle

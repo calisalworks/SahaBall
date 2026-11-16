@@ -266,7 +266,7 @@ export const ScoreboardHUD: React.FC<ScoreboardHUDProps> = ({
         )}
 
         {typeof pingMs === 'number' && (
-          <div className="hidden md:flex items-center min-h-[40px] px-2.5 rounded-xl bg-black/45 border border-white/15 text-[11px] font-mono-num text-white/85">
+          <div className="flex items-center min-h-[32px] sm:min-h-[40px] px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl bg-black/45 border border-white/15 text-[10px] sm:text-[11px] font-mono-num text-white/85">
             {pingMs} ms
           </div>
         )}
