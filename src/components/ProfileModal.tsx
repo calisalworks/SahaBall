@@ -14,6 +14,9 @@ interface ProfileModalProps {
   profile: ProfileData;
   ownedShopCount: number;
   onUpdateUsername: (newName: string) => { ok: boolean; error?: string };
+  googleAccount: { email: string | null; displayName: string | null } | null;
+  onGoogleSignIn: () => Promise<void>;
+  onGoogleSignOut: () => Promise<void>;
   onClose: () => void;
 }
 
@@ -45,11 +48,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   profile,
   ownedShopCount,
   onUpdateUsername,
+  googleAccount,
+  onGoogleSignIn,
+  onGoogleSignOut,
   onClose,
 }) => {
   const [nameInput, setNameInput] = useState(playerName);
   const [feedback, setFeedback] = useState<{ type: 'ok' | 'err' | 'info'; text: string } | null>(null);
   const [tab, setTab] = useState<'overview' | 'achievements'>('overview');
+  const [googleBusy, setGoogleBusy] = useState(false);
 
   if (!open) return null;
 
@@ -78,11 +85,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     }
   };
 
-  const handleGooglePrepClick = () => {
-    setFeedback({
-      type: 'info',
-      text: 'Google ile giriş özelliği yakında aktif edilecek. İlk kullanıcı adı belirleme ücretsiz, sonraki değişiklikler 5.000 jeton olacaktır.',
-    });
+  const handleGoogleClick = async () => {
+    setGoogleBusy(true);
+    setFeedback(null);
+    try {
+      if (googleAccount) {
+        await onGoogleSignOut();
+        setFeedback({ type: 'info', text: 'Google hesabından çıkış yapıldı.' });
+      } else {
+        await onGoogleSignIn();
+        setFeedback({
+          type: 'ok',
+          text: 'Google hesabın bağlandı. Oyun ilerlemesinin sunucuya yedeklenmesi henüz etkin değil; bu sonraki aşamada tamamlanacak.',
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Google ile giriş tamamlanamadı.';
+      setFeedback({ type: 'err', text: message });
+    } finally {
+      setGoogleBusy(false);
+    }
   };
 
   return (
@@ -227,21 +249,24 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                       <span className="font-display font-bold text-sm text-[#0B2545]">
                         Google Hesabı
                       </span>
-                      <span className="text-[10px] font-bold text-sky-700">· Yakında</span>
+                      <span className={`text-[10px] font-bold ${googleAccount ? 'text-emerald-700' : 'text-sky-700'}`}>
+                        · {googleAccount ? 'Bağlı' : 'Hesap bağla'}
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600 truncate">
-                      Giriş yaparak profilini ve ilerlemeni yedekle
+                      {googleAccount?.email || googleAccount?.displayName || 'Google hesabını bağla'}
                     </p>
                   </div>
                 </div>
 
                 <button
                   type="button"
-                  onClick={handleGooglePrepClick}
-                  className="min-h-[40px] px-3.5 rounded-xl bg-[#FAF4E8] hover:bg-[#F3E9D2] border border-[#DFCCA8] text-[#0B2545] text-xs font-display font-bold flex items-center gap-2 transition-colors whitespace-nowrap cursor-pointer"
+                  onClick={handleGoogleClick}
+                  disabled={googleBusy}
+                  className="min-h-[40px] px-3.5 rounded-xl bg-[#FAF4E8] hover:bg-[#F3E9D2] border border-[#DFCCA8] text-[#0B2545] text-xs font-display font-bold flex items-center gap-2 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60"
                 >
                   <GoogleGIcon className="w-4 h-4" />
-                  <span>Google ile Giriş</span>
+                  <span>{googleBusy ? 'Bekleyin...' : googleAccount ? 'Google’dan Çıkış' : 'Google ile Giriş'}</span>
                 </button>
               </div>
 
