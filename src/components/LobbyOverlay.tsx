@@ -327,7 +327,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         {/* Main Middle Body: Teams (Left 7 cols) + Lobby Chat (Right 5 cols) */}
         <div className={`flex-1 min-h-0 grid ${isChatFocused ? 'grid-cols-1' : 'grid-cols-1 min-[680px]:grid-cols-12'} gap-2 overflow-hidden`}>
           {/* Teams Section */}
-          {!isChatFocused && <div className="min-[680px]:col-span-6 min-h-0 overflow-y-auto pr-0.5">
+          {!isChatFocused && <div className="min-[680px]:col-span-5 min-h-0 overflow-y-auto pr-0.5">
             {isClubCompetition ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                 {Array.from({ length: clubSlotCount }, (_, slotIdx) => {
@@ -575,7 +575,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
           </div>}
 
           {/* Lobby Chat Panel */}
-          <div className={`${isChatFocused ? 'col-span-1' : 'min-[680px]:col-span-6'} flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5`}>
+          <div className={`${isChatFocused ? 'col-span-1' : 'min-[680px]:col-span-7'} flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5`}>
             <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 shrink-0">
               <span className="text-xs font-display font-bold text-white flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
