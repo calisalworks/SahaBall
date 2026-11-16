@@ -399,9 +399,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                               className="px-1.5 py-0.5 rounded bg-white/12 text-[10px] font-medium text-white flex items-center justify-between gap-1"
                             >
                               <span className="truncate">
-                                [{ROLE_LABELS[m.role ?? 'ortasaha'].short}] {m.name}{' '}
-                                {m.isHost ? '★' : ''}
-                                {m.isWatchingAd ? ' (reklam izliyor)' : ''}
+                                {m.name}
                               </span>
                               <div className="flex items-center gap-1 shrink-0">
                                 {m.isReady && <Check className="w-3 h-3 text-emerald-400" />}
@@ -469,15 +467,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           className="px-2 py-1 rounded-lg bg-black/35 border border-white/10 text-[11px] font-medium text-white flex items-center justify-between gap-1.5"
                         >
                           <div className="min-w-0 truncate">
-                            <span className="font-bold text-white/70 mr-1">
-                              [{ROLE_LABELS[m.role ?? 'ortasaha'].short}]
-                            </span>
                             <span>{m.name}</span>
-                            {m.id === localClientId && <span className="text-amber-300 ml-1">(Sen)</span>}
-                            {m.isHost && <span className="text-amber-400 ml-1">★</span>}
-                            {m.isWatchingAd && (
-                              <span className="text-amber-300 font-semibold ml-1">(reklam izliyor)</span>
-                            )}
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
                             <span
@@ -507,7 +497,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           key={b.id}
                           className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[10.5px] font-medium text-white/80 truncate"
                         >
-                          [{ROLE_LABELS[b.role ?? 'ortasaha'].short}] {b.name}
+                          {b.name}
                         </div>
                       ))}
                       {redMembers.length === 0 && redPreviewBots.length === 0 && (
