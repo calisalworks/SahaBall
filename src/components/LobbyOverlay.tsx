@@ -225,43 +225,43 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
   const needsCoinsToPlay = localMember?.team !== 'spec' && coins < ONLINE_ENTRY_FEE;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-stretch justify-center p-[max(0.25rem,env(safe-area-inset-top))] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] bg-black/65 overflow-hidden">
-      <div className={`w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-slate-950/95 border border-white/15 rounded-xl shadow-2xl p-2 sm:p-3 text-white flex flex-col gap-1.5 ${isChatFocused ? 'p-1' : ''}`}>
+    <div className="fixed inset-0 z-40 flex items-stretch justify-center p-[max(0.25rem,env(safe-area-inset-top))] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] bg-slate-900/25 overflow-hidden">
+      <div className={`w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-white/95 border border-slate-200 rounded-xl shadow-2xl p-2 sm:p-3 text-slate-800 flex flex-col gap-1.5 ${isChatFocused ? 'p-1' : ''}`}>
         {/* Room Header & Invite Controls */}
-        {!isChatFocused && <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
+        {!isChatFocused && <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200 shrink-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono-num font-bold text-lg sm:text-xl tracking-widest text-amber-300">
+            <span className="font-mono-num font-bold text-lg sm:text-xl tracking-widest text-amber-700">
               {room.roomCode}
             </span>
             {isTournament && (
-              <span className="px-2 py-0.5 rounded-md bg-amber-400/20 border border-amber-400/40 text-amber-300 text-[10px] font-display font-bold flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md bg-amber-400/20 border border-amber-400/40 text-amber-700 text-[10px] font-display font-bold flex items-center gap-1">
                 <Trophy className="w-3 h-3" />
                 <span>Turnuva (32T)</span>
               </span>
             )}
             {isLeague && (
-              <span className="px-2 py-0.5 rounded-md bg-emerald-400/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-display font-bold flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md bg-emerald-400/20 border border-emerald-400/40 text-emerald-700 text-[10px] font-display font-bold flex items-center gap-1">
                 <Trophy className="w-3 h-3" />
                 <span>Lig (18T)</span>
               </span>
             )}
-            <span className="text-[11px] text-slate-300">
+            <span className="text-[11px] text-slate-600">
               {room.mode} · {PITCH_SIZE_LABELS[room.pitchSize].label} · {Math.round(room.durationSec / 60)} Dk
             </span>
-            <span className="text-[11px] font-semibold text-amber-200">
+            <span className="text-[11px] font-semibold text-amber-700">
               · Giriş 10 Jeton / Galibiyet +18 Jeton
             </span>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <div className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-200 font-mono-num text-xs font-bold">
+            <div className="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-400/30 text-amber-700 font-mono-num text-xs font-bold">
               {coins} Jeton
             </div>
 
             <button
               type="button"
               onClick={handleCopyInvite}
-              className="min-h-[34px] px-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="min-h-[34px] px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Kopyalandı' : 'Davet'}</span>
@@ -272,7 +272,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 type="button"
                 onClick={handleNativeShare}
                 aria-label="Paylaş"
-                className="min-w-[34px] min-h-[34px] px-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/35 text-emerald-200 flex items-center justify-center gap-1 text-xs font-semibold transition-colors"
+                className="min-w-[34px] min-h-[34px] px-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/35 text-emerald-700 flex items-center justify-center gap-1 text-xs font-semibold transition-colors"
               >
                 <Share2 className="w-3.5 h-3.5" />
               </button>
@@ -282,33 +282,33 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
 
         {/* Host Compact Settings Strip (Small Windows for each setting) */}
         {!isChatFocused && isHost && (
-          <div className="flex flex-wrap items-center justify-between gap-1.5 pb-1.5 border-b border-white/10 shrink-0">
+          <div className="flex flex-wrap items-center justify-between gap-1.5 pb-1.5 border-b border-slate-200 shrink-0">
             <div className="flex flex-wrap items-center gap-1">
               <button
                 type="button"
                 onClick={() => setSetupModal('mode')}
-                className="min-h-[28px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-[11px] font-bold"
+                className="min-h-[28px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold"
               >
                 Mod: {room.mode}
               </button>
               <button
                 type="button"
                 onClick={() => setSetupModal('pitch')}
-                className="min-h-[28px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-[11px] font-bold"
+                className="min-h-[28px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold"
               >
                 Saha: {PITCH_SIZE_LABELS[room.pitchSize].label.replace(' Saha', '')}
               </button>
               <button
                 type="button"
                 onClick={() => setSetupModal('duration')}
-                className="min-h-[28px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-[11px] font-bold"
+                className="min-h-[28px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold"
               >
                 Süre: {Math.round(room.durationSec / 60)} Dk
               </button>
               <button
                 type="button"
                 onClick={() => setSetupModal('teams')}
-                className="min-h-[28px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-[11px] font-bold flex items-center gap-1"
+                className="min-h-[28px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold flex items-center gap-1"
               >
                 <Palette className="w-3 h-3" />
                 <span>{isClubCompetition ? 'Takımım' : 'Takımlar'}</span>
@@ -316,7 +316,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               <button
                 type="button"
                 onClick={() => setSetupModal('difficulty')}
-                className="min-h-[28px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-[11px] font-bold"
+                className="min-h-[28px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-bold"
               >
                 Bot: {BOT_DIFFICULTY_LABELS[defaultBotDiff].label}
               </button>
@@ -357,10 +357,10 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
-                          <span className="font-display font-bold text-[11px] text-white truncate">
+                          <span className="font-display font-bold text-[11px] text-slate-800 truncate">
                             {slotIdx + 1}. {clubName}
                           </span>
-                          <span className="font-mono-num text-[10px] text-slate-300 shrink-0">
+                          <span className="font-mono-num text-[10px] text-slate-600 shrink-0">
                             {slotMembers.length}/{maxPerTeam}
                           </span>
                         </div>
@@ -368,7 +368,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           {slotMembers.map((m) => (
                             <div
                               key={m.id}
-                              className="px-1.5 py-0.5 rounded bg-white/12 text-[10px] font-medium text-white flex items-center justify-between gap-1"
+                              className="px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-medium text-slate-800 flex items-center justify-between gap-1"
                             >
                               <span className="truncate">
                                 {m.name}
@@ -380,7 +380,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                                     type="button"
                                     title="Odadan At"
                                     onClick={() => onKickMember(m.id)}
-                                    className="text-rose-300 hover:text-rose-200"
+                                    className="text-rose-300 hover:text-rose-700"
                                   >
                                     <UserX className="w-3 h-3" />
                                   </button>
@@ -389,13 +389,13 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                             </div>
                           ))}
                           {slotMembers.length === 0 && (
-                            <span className="text-[10px] text-white/40 italic">Bot Takım</span>
+                            <span className="text-[10px] text-slate-500 italic">Bot Takım</span>
                           )}
                         </div>
                       </div>
 
                       {isMine ? (
-                        <div className="w-full min-h-[24px] rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-200 text-[10px] font-bold flex items-center justify-center">
+                        <div className="w-full min-h-[24px] rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-700 text-[10px] font-bold flex items-center justify-center">
                           Buradasın
                         </div>
                       ) : (
@@ -403,7 +403,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           <button
                             type="button"
                             onClick={() => onSwitchTournamentSlot(slotIdx)}
-                            className="w-full min-h-[24px] rounded-lg bg-white/15 hover:bg-white/25 text-white text-[10px] font-semibold"
+                            className="w-full min-h-[24px] rounded-lg bg-white/15 hover:bg-white/25 text-slate-800 text-[10px] font-semibold"
                           >
                             Katıl
                           </button>
@@ -428,7 +428,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       >
                         {teamMeta.red.name}
                       </span>
-                      <span className="font-mono-num text-xs text-white/80">
+                      <span className="font-mono-num text-xs text-slate-700">
                         {redMembers.length + redPreviewBots.length}/{maxPerTeam}
                       </span>
                     </div>
@@ -436,7 +436,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       {redMembers.map((m) => (
                         <div
                           key={m.id}
-                          className="px-2 py-1 rounded-lg bg-black/35 border border-white/10 text-[11px] font-medium text-white flex items-center justify-between gap-1.5"
+                          className="px-2 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-medium text-slate-800 flex items-center justify-between gap-1.5"
                         >
                           <div className="min-w-0 truncate">
                             <span>{m.name}</span>
@@ -445,8 +445,8 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                             <span
                               className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                                 m.isReady
-                                  ? 'bg-emerald-500/25 text-emerald-300'
-                                  : 'bg-white/10 text-slate-300'
+                                  ? 'bg-emerald-500/25 text-emerald-700'
+                                  : 'bg-slate-100 text-slate-600'
                               }`}
                             >
                               {m.isReady ? 'Hazır' : 'Bekliyor'}
@@ -456,7 +456,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                                 type="button"
                                 title="Odadan At"
                                 onClick={() => onKickMember(m.id)}
-                                className="p-1 rounded bg-rose-500/25 hover:bg-rose-500/45 text-rose-200 transition-colors"
+                                className="p-1 rounded bg-rose-500/25 hover:bg-rose-500/45 text-rose-700 transition-colors"
                               >
                                 <UserX className="w-3 h-3" />
                               </button>
@@ -467,13 +467,13 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       {redPreviewBots.map((b) => (
                         <div
                           key={b.id}
-                          className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[10.5px] font-medium text-white/80 truncate"
+                          className="px-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-[10.5px] font-medium text-slate-700 truncate"
                         >
                           {b.name}
                         </div>
                       ))}
                       {redMembers.length === 0 && redPreviewBots.length === 0 && (
-                        <span className="text-[11px] text-white/40 italic">Oyuncu bekleniyor...</span>
+                        <span className="text-[11px] text-slate-500 italic">Oyuncu bekleniyor...</span>
                       )}
                     </div>
                   </div>
@@ -506,7 +506,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       >
                         {teamMeta.blue.name}
                       </span>
-                      <span className="font-mono-num text-xs text-white/80">
+                      <span className="font-mono-num text-xs text-slate-700">
                         {blueMembers.length + bluePreviewBots.length}/{maxPerTeam}
                       </span>
                     </div>
@@ -514,7 +514,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       {blueMembers.map((m) => (
                         <div
                           key={m.id}
-                          className="px-2 py-1 rounded-lg bg-black/35 border border-white/10 text-[11px] font-medium text-white flex items-center justify-between gap-1.5"
+                          className="px-2 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-medium text-slate-800 flex items-center justify-between gap-1.5"
                         >
                           <div className="min-w-0 truncate">
                             <span>{m.name}</span>
@@ -523,8 +523,8 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                             <span
                               className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                                 m.isReady
-                                  ? 'bg-emerald-500/25 text-emerald-300'
-                                  : 'bg-white/10 text-slate-300'
+                                  ? 'bg-emerald-500/25 text-emerald-700'
+                                  : 'bg-slate-100 text-slate-600'
                               }`}
                             >
                               {m.isReady ? 'Hazır' : 'Bekliyor'}
@@ -534,7 +534,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                                 type="button"
                                 title="Odadan At"
                                 onClick={() => onKickMember(m.id)}
-                                className="p-1 rounded bg-rose-500/25 hover:bg-rose-500/45 text-rose-200 transition-colors"
+                                className="p-1 rounded bg-rose-500/25 hover:bg-rose-500/45 text-rose-700 transition-colors"
                               >
                                 <UserX className="w-3 h-3" />
                               </button>
@@ -545,13 +545,13 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                       {bluePreviewBots.map((b) => (
                         <div
                           key={b.id}
-                          className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[10.5px] font-medium text-white/80 truncate"
+                          className="px-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-[10.5px] font-medium text-slate-700 truncate"
                         >
                           {b.name}
                         </div>
                       ))}
                       {blueMembers.length === 0 && bluePreviewBots.length === 0 && (
-                        <span className="text-[11px] text-white/40 italic">Oyuncu bekleniyor...</span>
+                        <span className="text-[11px] text-slate-500 italic">Oyuncu bekleniyor...</span>
                       )}
                     </div>
                   </div>
@@ -576,12 +576,12 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
 
           {/* Lobby Chat Panel */}
           <div className={`${isChatFocused ? 'col-span-1' : 'min-[680px]:col-span-7'} flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5`}>
-            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 shrink-0">
-              <span className="text-xs font-display font-bold text-white flex items-center gap-1.5">
+            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-200 shrink-0">
+              <span className="text-xs font-display font-bold text-slate-800 flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Lobi Sohbeti</span>
               </span>
-              <span className="text-[10px] text-slate-400">{room.members.length} Kişi</span>
+              <span className="text-[10px] text-slate-500">{room.members.length} Kişi</span>
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto space-y-1 pr-1 text-[11px] [touch-action:pan-y]">
@@ -594,12 +594,12 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                   <div key={msg.id} className="leading-snug break-words">
                     <span
                       className={`font-bold mr-1.5 ${
-                        msg.senderId === localClientId ? 'text-amber-300' : 'text-emerald-300'
+                        msg.senderId === localClientId ? 'text-amber-700' : 'text-emerald-700'
                       }`}
                     >
                       {msg.senderName}:
                     </span>
-                    <span dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'plaintext', textAlign: 'left' }} className="text-white/90">{msg.text}</span>
+                    <span dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'plaintext', textAlign: 'left' }} className="text-slate-800">{msg.text}</span>
                   </div>
                 ))
               )}
@@ -621,7 +621,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 enterKeyHint="send"
                 style={{ direction: 'ltr', unicodeBidi: 'plaintext', textAlign: 'left', touchAction: 'auto', userSelect: 'text', WebkitUserSelect: 'text' }}
                 placeholder="Mesaj yaz..."
-                className="flex-1 min-h-[40px] px-2.5 rounded-lg bg-black/40 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 [touch-action:pan-x]"
+                className="flex-1 min-h-[40px] px-2.5 rounded-lg bg-slate-100 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-400 [touch-action:pan-x]"
               />
               <button
                 type="submit"
@@ -635,12 +635,12 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         </div>
 
         {/* Footer Actions: Leave / Spec + Ad Watch + Ready + Host Start */}
-        {!isChatFocused && <div className="pt-1.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
+        {!isChatFocused && <div className="pt-1.5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
               onClick={onLeaveRoom}
-              className="min-h-[38px] px-3 rounded-xl bg-white/10 hover:bg-white/15 text-white/85 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="min-h-[38px] px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition-colors"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Ayrıl</span>
@@ -649,13 +649,13 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               <button
                 type="button"
                 onClick={() => onSwitchTeam('spec')}
-                className="min-h-[38px] px-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-medium transition-colors"
+                className="min-h-[38px] px-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-medium transition-colors"
               >
                 İzleyici
               </button>
             )}
             {specMembers.length > 0 && (
-              <span className="text-[10px] text-slate-400">
+              <span className="text-[10px] text-slate-500">
                 İzleyen: {specMembers.map((s) => s.name).join(', ')}
               </span>
             )}
@@ -669,7 +669,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               className={`min-h-[38px] px-3 rounded-xl font-display font-bold text-xs flex items-center gap-1.5 transition-all active:scale-97 ${
                 needsCoinsToPlay
                   ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-md ring-2 ring-amber-200'
-                  : 'bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200'
+                  : 'bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-700'
               }`}
             >
               <PlayCircle className="w-4 h-4" />
@@ -684,8 +684,8 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 onClick={() => onToggleReady(!localMember.isReady)}
                 className={`min-h-[38px] px-3.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5 border transition-colors ${
                   localMember.isReady
-                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300'
-                    : 'bg-white/10 hover:bg-white/15 border-white/25 text-white'
+                    ? 'bg-emerald-500/20 border-emerald-400 text-emerald-700'
+                    : 'bg-slate-100 hover:bg-slate-200 border-white/25 text-slate-800'
                 }`}
               >
                 <Check className="w-3.5 h-3.5" />
@@ -696,7 +696,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
             {isHost ? (
               <div className="flex items-center gap-2">
                 {startBlockReason && (
-                  <span className="text-[10.5px] font-medium text-amber-300 hidden sm:inline">
+                  <span className="text-[10.5px] font-medium text-amber-700 hidden sm:inline">
                     {startBlockReason}
                   </span>
                 )}
@@ -706,7 +706,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                   onClick={onStartMatch}
                   className={`min-h-[40px] px-4 rounded-xl font-display font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-lg transition-all ${
                     !canHostStart
-                      ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                      ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                       : isTournament
                         ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 active:scale-97'
                         : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 active:scale-97'
@@ -723,7 +723,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 </button>
               </div>
             ) : (
-              <span className="text-xs text-emerald-300/90 font-medium">
+              <span className="text-xs text-emerald-700/90 font-medium">
                 {localMember?.isReady ? 'Kurucu bekleniyor...' : 'Başlamak için Hazır Ol'}
               </span>
             )}
