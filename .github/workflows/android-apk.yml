@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -110,7 +109,7 @@ jobs:
           manifest = root / "AndroidManifest.xml"
           text = manifest.read_text()
           text = re.sub(
-              r'(<activity\\b[^>]*android:name="[^"]*MainActivity"[^>]*)(>)',
+              r'(<activity\b[^>]*android:name="[^"]*MainActivity"[^>]*)(>)',
               lambda m: m.group(1) + ' android:screenOrientation="landscape"' + m.group(2)
                   if 'android:screenOrientation=' not in m.group(1) else m.group(0),
               text,
