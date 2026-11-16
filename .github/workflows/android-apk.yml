@@ -62,7 +62,7 @@ jobs:
           if "rgcfaIncludeGoogle" not in text:
               text = text.replace(
                   "ext {",
-                  "ext {\n    rgcfaIncludeGoogle = true\n    androidxCredentialsVersion = '1.3.0'",
+                  "ext {\\n    rgcfaIncludeGoogle = true\\n    androidxCredentialsVersion = '1.3.0'",
                   1,
               )
           variables.write_text(text)
@@ -72,7 +72,7 @@ jobs:
           if "com.google.gms:google-services" not in text:
               text = text.replace(
                   "dependencies {",
-                  'dependencies {\n        classpath "com.google.gms:google-services:4.4.2"',
+                  'dependencies {\\n        classpath "com.google.gms:google-services:4.4.2"',
                   1,
               )
           root_gradle.write_text(text)
@@ -80,7 +80,7 @@ jobs:
           app_gradle = Path("android/app/build.gradle")
           text = app_gradle.read_text()
           if "com.google.gms.google-services" not in text:
-              text += "\napply plugin: 'com.google.gms.google-services'\n"
+              text += "\\napply plugin: 'com.google.gms.google-services'\\n"
           app_gradle.write_text(text)
           PY
 
@@ -163,6 +163,50 @@ jobs:
           manifest.write_text(text)
           PY
 
+      - name: Configure stable Android debug signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::GitHub secret $name is missing."
+              exit 1
+            fi
+          done
+
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/sahaball-upload-key.jks
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          gradle = Path("android/app/build.gradle")
+          text = gradle.read_text()
+          if "stableDebug" not in text:
+              text = text.replace(
+                  "    buildTypes {",
+                  """    signingConfigs {
+                  stableDebug {
+                      storeFile file("sahaball-upload-key.jks")
+                      storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                      keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                      keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+                  }
+              }
+
+              buildTypes {""",
+                  1,
+              )
+              text = text.replace(
+                  "        debug {",
+                  "        debug {\\n            signingConfig signingConfigs.stableDebug",
+                  1,
+              )
+          gradle.write_text(text)
+          PY
+
       - name: Build debug APK
         run: |
           cd android
@@ -175,7 +219,6 @@ jobs:
           ./gradlew signingReport | tee signing-report.txt
           {
             echo "### Android signing fingerprints"
-            echo "Full signingReport output:"
             cat signing-report.txt
           } >> "$GITHUB_STEP_SUMMARY"
 
