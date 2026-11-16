@@ -125,7 +125,12 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew signingReport
+          ./gradlew signingReport | tee signing-report.txt
+          {
+            echo "### Android signing fingerprints"
+            echo "Full signingReport output:"
+            cat signing-report.txt
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build debug APK
         run: |
