@@ -231,7 +231,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
 
   return (
     <div className="fixed inset-0 z-40 flex items-stretch justify-center p-[max(0.25rem,env(safe-area-inset-top))] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] bg-black/65 overflow-hidden">
-      <div className="w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-slate-950/95 border border-white/15 rounded-xl shadow-2xl p-2 sm:p-3 text-white flex flex-col gap-1.5">
+      <div className={`w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-slate-950/95 border border-white/15 rounded-xl shadow-2xl p-2 sm:p-3 text-white flex flex-col gap-1.5 ${isChatFocused ? 'p-1' : ''}`}>
         {/* Room Header & Invite Controls */}
         {!isChatFocused && <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -325,29 +325,6 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               >
                 Bot: {BOT_DIFFICULTY_LABELS[defaultBotDiff].label}
               </button>
-            </div>
-          </div>
-        )}
-
-        {/* Position selection is intentionally omitted in online rooms. */}
-        {false && localMember && localMember.team !== 'spec' && (
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-white/10 shrink-0">
-            <span className="text-[11px] font-semibold text-slate-300">Mevkin (Online):</span>
-            <div className="grid grid-cols-4 gap-1 p-0.5 rounded-lg bg-white/8 border border-white/10 flex-1 max-w-md">
-              {ROLES.map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => onChangeRole(r)}
-                  className={`min-h-[28px] px-2 rounded-md text-[11px] font-display font-bold transition-colors ${
-                    localMember.role === r
-                      ? 'bg-emerald-500 text-slate-950'
-                      : 'text-white/75 hover:bg-white/10'
-                  }`}
-                >
-                  {ROLE_LABELS[r].label}
-                </button>
-              ))}
             </div>
           </div>
         )}
@@ -545,15 +522,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           className="px-2 py-1 rounded-lg bg-black/35 border border-white/10 text-[11px] font-medium text-white flex items-center justify-between gap-1.5"
                         >
                           <div className="min-w-0 truncate">
-                            <span className="font-bold text-white/70 mr-1">
-                              [{ROLE_LABELS[m.role ?? 'ortasaha'].short}]
-                            </span>
                             <span>{m.name}</span>
-                            {m.id === localClientId && <span className="text-amber-300 ml-1">(Sen)</span>}
-                            {m.isHost && <span className="text-amber-400 ml-1">★</span>}
-                            {m.isWatchingAd && (
-                              <span className="text-amber-300 font-semibold ml-1">(reklam izliyor)</span>
-                            )}
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
                             <span
@@ -583,7 +552,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                           key={b.id}
                           className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[10.5px] font-medium text-white/80 truncate"
                         >
-                          [{ROLE_LABELS[b.role ?? 'ortasaha'].short}] {b.name}
+                          {b.name}
                         </div>
                       ))}
                       {blueMembers.length === 0 && bluePreviewBots.length === 0 && (
