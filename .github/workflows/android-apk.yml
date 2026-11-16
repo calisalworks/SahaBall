@@ -39,7 +39,7 @@ jobs:
       - name: Build web assets for Android
         run: npm run build
         env:
-          VITE_SERVER_URL: https://193.111.125.252
+          VITE_SERVER_URL: https://sahaball.opik.net
 
       - name: Generate Android project
         run: npx cap add android
