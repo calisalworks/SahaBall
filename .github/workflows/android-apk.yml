@@ -121,16 +121,21 @@ jobs:
           manifest.write_text(text)
           PY
 
-      - name: Report Android signing fingerprints
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew signingReport
-
       - name: Build debug APK
         run: |
           cd android
           ./gradlew assembleDebug
+
+      - name: Report Android signing fingerprints
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew signingReport | tee signing-report.txt
+          {
+            echo "### Android signing fingerprints"
+            echo "Full signingReport output:"
+            cat signing-report.txt
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload test APK
         uses: actions/upload-artifact@v4
