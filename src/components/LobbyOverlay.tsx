@@ -86,6 +86,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
   const [copied, setCopied] = useState(false);
   const [setupModal, setSetupModal] = useState<SetupModalKind>(null);
   const [chatInput, setChatInput] = useState('');
+  const [isChatFocused, setIsChatFocused] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const isHost = room.hostId === localClientId;
@@ -232,7 +233,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
     <div className="fixed inset-0 z-40 flex items-stretch justify-center p-[max(0.25rem,env(safe-area-inset-top))] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] bg-black/65 overflow-hidden">
       <div className="w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-slate-950/95 border border-white/15 rounded-xl shadow-2xl p-2 sm:p-3 text-white flex flex-col gap-1.5">
         {/* Room Header & Invite Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
+        {!isChatFocused && <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-mono-num font-bold text-lg sm:text-xl tracking-widest text-amber-300">
               {room.roomCode}
@@ -282,41 +283,11 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               </button>
             )}
           </div>
-        </div>
+        </div>}
 
         {/* Host Compact Settings Strip (Small Windows for each setting) */}
-        {isHost && (
+        {!isChatFocused && isHost && (
           <div className="flex flex-wrap items-center justify-between gap-1.5 pb-1.5 border-b border-white/10 shrink-0">
-            <div className="grid grid-cols-3 gap-1 p-0.5 rounded-lg bg-white/8 border border-white/10">
-              <button
-                type="button"
-                onClick={() => emitSettings({ gameType: 'single' })}
-                className={`min-h-[28px] px-2 rounded-md text-[10.5px] font-display font-bold transition-colors ${
-                  !isClubCompetition ? 'bg-white text-slate-950' : 'text-white/75 hover:bg-white/10'
-                }`}
-              >
-                Normal Maç
-              </button>
-              <button
-                type="button"
-                onClick={() => emitSettings({ gameType: 'tournament', tournamentSize: 32 })}
-                className={`min-h-[28px] px-2 rounded-md text-[10.5px] font-display font-bold transition-colors ${
-                  isTournament ? 'bg-amber-400 text-slate-950' : 'text-white/75 hover:bg-white/10'
-                }`}
-              >
-                Turnuva
-              </button>
-              <button
-                type="button"
-                onClick={() => emitSettings({ gameType: 'league' })}
-                className={`min-h-[28px] px-2 rounded-md text-[10.5px] font-display font-bold transition-colors ${
-                  isLeague ? 'bg-emerald-400 text-slate-950' : 'text-white/75 hover:bg-white/10'
-                }`}
-              >
-                Lig
-              </button>
-            </div>
-
             <div className="flex flex-wrap items-center gap-1">
               <button
                 type="button"
@@ -358,8 +329,8 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
           </div>
         )}
 
-        {/* Position (Mevki) Selection Bar — Exclusively in Online Lobby */}
-        {localMember && localMember.team !== 'spec' && (
+        {/* Position selection is intentionally omitted in online rooms. */}
+        {false && localMember && localMember.team !== 'spec' && (
           <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-white/10 shrink-0">
             <span className="text-[11px] font-semibold text-slate-300">Mevkin (Online):</span>
             <div className="grid grid-cols-4 gap-1 p-0.5 rounded-lg bg-white/8 border border-white/10 flex-1 max-w-md">
@@ -382,9 +353,9 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         )}
 
         {/* Main Middle Body: Teams (Left 7 cols) + Lobby Chat (Right 5 cols) */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 min-[680px]:grid-cols-12 gap-2 overflow-hidden">
+        <div className={`flex-1 min-h-0 grid ${isChatFocused ? 'grid-cols-1' : 'grid-cols-1 min-[680px]:grid-cols-12'} gap-2 overflow-hidden`}>
           {/* Teams Section */}
-          <div className="min-[680px]:col-span-6 min-h-0 overflow-y-auto pr-0.5">
+          {!isChatFocused && <div className="min-[680px]:col-span-6 min-h-0 overflow-y-auto pr-0.5">
             {isClubCompetition ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                 {Array.from({ length: clubSlotCount }, (_, slotIdx) => {
@@ -647,10 +618,10 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 </div>
               </div>
             )}
-          </div>
+          </div>}
 
           {/* Lobby Chat Panel */}
-          <div className="min-[680px]:col-span-6 flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5">
+          <div className={`${isChatFocused ? 'col-span-1' : 'min-[680px]:col-span-6'} flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5`}>
             <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 shrink-0">
               <span className="text-xs font-display font-bold text-white flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
@@ -659,7 +630,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               <span className="text-[10px] text-slate-400">{room.members.length} Kişi</span>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-1 pr-1 text-[11px]">
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-1 pr-1 text-[11px] [touch-action:pan-y]">
               {(room.chatMessages ?? []).length === 0 ? (
                 <div className="h-full flex items-center justify-center text-slate-500 text-center">
                   Maç başlamadan önce arkadaşlarınla sohbet edebilirsin.
@@ -674,7 +645,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                     >
                       {msg.senderName}:
                     </span>
-                    <span className="text-white/90">{msg.text}</span>
+                    <span dir="ltr" style={{ direction: 'ltr', unicodeBidi: 'plaintext', textAlign: 'left' }} className="text-white/90">{msg.text}</span>
                   </div>
                 ))
               )}
@@ -687,8 +658,16 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
                 value={chatInput}
                 maxLength={180}
                 onChange={(e) => setChatInput(e.target.value)}
+                onFocus={() => setIsChatFocused(true)}
+                onBlur={() => setIsChatFocused(false)}
+                dir="ltr"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="send"
+                style={{ direction: 'ltr', unicodeBidi: 'plaintext', textAlign: 'left', touchAction: 'auto', userSelect: 'text', WebkitUserSelect: 'text' }}
                 placeholder="Mesaj yaz..."
-                className="flex-1 min-h-[34px] px-2.5 rounded-lg bg-black/40 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400"
+                className="flex-1 min-h-[40px] px-2.5 rounded-lg bg-black/40 border border-white/15 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 [touch-action:pan-x]"
               />
               <button
                 type="submit"
@@ -702,7 +681,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         </div>
 
         {/* Footer Actions: Leave / Spec + Ad Watch + Ready + Host Start */}
-        <div className="pt-1.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
+        {!isChatFocused && <div className="pt-1.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
@@ -795,7 +774,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
               </span>
             )}
           </div>
-        </div>
+        </div>}
       </div>
 
       {isHost && (
