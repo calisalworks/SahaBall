@@ -679,8 +679,7 @@ async function bootstrap(): Promise<void> {
         const pitchSize: PitchSize =
           msg.pitchSize === 'large' || msg.pitchSize === 'ellipse' ? msg.pitchSize : 'normal';
         const durationSec = [120, 180, 300].includes(msg.durationSec) ? msg.durationSec : 180;
-        const gameType: RoomGameType =
-          msg.gameType === 'tournament' || msg.gameType === 'league' ? msg.gameType : 'single';
+        const gameType: RoomGameType = 'single';
         const tournamentSize: TournamentSize = 32;
         const teamSize = MODE_CONFIGS[mode].teamSize;
         const fillBots = Boolean(msg.fillBots);
@@ -951,19 +950,9 @@ async function bootstrap(): Promise<void> {
             room.blueBotCount = nextTeamSize;
           }
         }
-        if (msg.gameType === 'single' || msg.gameType === 'tournament' || msg.gameType === 'league') {
-          if (room.gameType !== msg.gameType) {
-            room.tournament = null;
-            room.league = null;
-          }
-          room.gameType = msg.gameType;
-          const cap = room.gameType === 'league' ? 18 : 32;
-          for (const m of room.members.values()) {
-            if (m.tournamentSlot >= cap) {
-              m.tournamentSlot = m.tournamentSlot % cap;
-            }
-          }
-        }
+        room.gameType = 'single';
+        room.tournament = null;
+        room.league = null;
         room.tournamentSize = 32;
         if (msg.defaultBotDifficulty !== undefined) {
           room.defaultBotDifficulty = sanitizeDifficulty(msg.defaultBotDifficulty);
