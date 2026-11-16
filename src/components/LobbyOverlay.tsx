@@ -229,8 +229,8 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
   const needsCoinsToPlay = localMember?.team !== 'spec' && coins < ONLINE_ENTRY_FEE;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-[max(0.45rem,env(safe-area-inset-top))] pl-[max(0.55rem,env(safe-area-inset-left))] pr-[max(0.55rem,env(safe-area-inset-right))] pb-[max(0.45rem,env(safe-area-inset-bottom))] sm:p-4 bg-black/55 overflow-hidden">
-      <div className="w-full max-w-4xl max-h-full overflow-hidden bg-slate-950/95 border border-white/15 rounded-2xl shadow-2xl p-3 sm:p-4 text-white flex flex-col gap-2">
+    <div className="fixed inset-0 z-40 flex items-stretch justify-center p-[max(0.25rem,env(safe-area-inset-top))] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] bg-black/65 overflow-hidden">
+      <div className="w-full max-w-none h-full max-h-[100dvh] min-h-0 overflow-hidden bg-slate-950/95 border border-white/15 rounded-xl shadow-2xl p-2 sm:p-3 text-white flex flex-col gap-1.5">
         {/* Room Header & Invite Controls */}
         <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-white/10 shrink-0">
           <div className="flex flex-wrap items-center gap-2">
@@ -382,9 +382,9 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         )}
 
         {/* Main Middle Body: Teams (Left 7 cols) + Lobby Chat (Right 5 cols) */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 min-[680px]:grid-cols-12 gap-2.5 overflow-hidden">
+        <div className="flex-1 min-h-0 grid grid-cols-1 min-[680px]:grid-cols-12 gap-2 overflow-hidden">
           {/* Teams Section */}
-          <div className="min-[680px]:col-span-7 min-h-0 overflow-y-auto pr-0.5">
+          <div className="min-[680px]:col-span-6 min-h-0 overflow-y-auto pr-0.5">
             {isClubCompetition ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                 {Array.from({ length: clubSlotCount }, (_, slotIdx) => {
@@ -650,7 +650,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
           </div>
 
           {/* Lobby Chat Panel */}
-          <div className="min-[680px]:col-span-5 flex flex-col min-h-[140px] max-h-[240px] rounded-xl bg-white/[0.04] border border-white/12 p-2.5">
+          <div className="min-[680px]:col-span-6 flex flex-col min-h-0 h-full rounded-xl bg-white/[0.04] border border-white/12 p-2.5">
             <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10 shrink-0">
               <span className="text-xs font-display font-bold text-white flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
@@ -702,7 +702,7 @@ export const LobbyOverlay: React.FC<LobbyOverlayProps> = ({
         </div>
 
         {/* Footer Actions: Leave / Spec + Ad Watch + Ready + Host Start */}
-        <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div className="pt-1.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-1.5 shrink-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
