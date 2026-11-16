@@ -285,6 +285,19 @@ jobs:
           cd android
           chmod +x gradlew
           ./gradlew signingReport | tee signing-report.txt
+
+          EXPECTED_SHA1="9D:7E:C2:B5:86:95:7F:FA:2B:6D:AC:61:30:3F:B8:6B:2F:C6:92:07"
+          EXPECTED_SHA256="86:42:FE:EF:D7:14:44:04:25:24:0E:A2:A8:F8:75:28:D9:CA:82:1E:9A:C6:5F:C9:7E:5E:16:B1:B9:F4:95:18"
+
+          if ! grep -Fq "SHA1: $EXPECTED_SHA1" signing-report.txt; then
+            echo "::error::Debug APK is not signed with the configured stable SHA-1."
+            exit 1
+          fi
+          if ! grep -Fq "SHA-256: $EXPECTED_SHA256" signing-report.txt; then
+            echo "::error::Debug APK is not signed with the configured stable SHA-256."
+            exit 1
+          fi
+
           {
             echo "### Android signing fingerprints"
             cat signing-report.txt
