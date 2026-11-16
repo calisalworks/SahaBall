@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { Home, PlayCircle, Target, Volume2, VolumeX } from 'lucide-react';
 import { AdRewardModal } from './components/AdRewardModal';
 import { DailyRewardModal } from './components/DailyRewardModal';
@@ -70,6 +71,7 @@ import type {
 } from './game/types';
 
 type ScreenView = 'menu' | 'lobby' | 'playing' | 'training' | 'tutorial' | 'challenge' | 'tournament' | 'league';
+type GoogleAccountInfo = { uid: string; email: string | null; displayName: string | null };
 
 const EMPTY_PLAYERS: PlayerEntity[] = [];
 
@@ -241,6 +243,40 @@ export default function App() {
   });
   const [profile, setProfile] = useState<ProfileData>(() => loadProfile());
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
+  const [googleAccount, setGoogleAccount] = useState<GoogleAccountInfo | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    FirebaseAuthentication.getCurrentUser()
+      .then(({ user }) => {
+        if (active && user) {
+          setGoogleAccount({
+            uid: user.uid,
+            email: user.email ?? null,
+            displayName: user.displayName ?? null,
+          });
+        }
+      })
+      .catch(() => {
+        // No Firebase session is a normal first-launch state.
+      });
+    return () => { active = false; };
+  }, []);
+
+  const handleGoogleSignIn = useCallback(async () => {
+    const { user } = await FirebaseAuthentication.signInWithGoogle();
+    if (!user) throw new Error('Google hesabı doğrulanamadı.');
+    setGoogleAccount({
+      uid: user.uid,
+      email: user.email ?? null,
+      displayName: user.displayName ?? null,
+    });
+  }, []);
+
+  const handleGoogleSignOut = useCallback(async () => {
+    await FirebaseAuthentication.signOut();
+    setGoogleAccount(null);
+  }, []);
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [teamMeta, setTeamMeta] = useState<TeamMetaMap>(() => DEFAULT_TEAM_META);
 
@@ -2595,6 +2631,9 @@ export default function App() {
           profile={profile}
           ownedShopCount={ownedIds.length}
           onUpdateUsername={handleUpdateUsername}
+          googleAccount={googleAccount}
+          onGoogleSignIn={handleGoogleSignIn}
+          onGoogleSignOut={handleGoogleSignOut}
           onClose={() => setProfileOpen(false)}
         />
       )}
