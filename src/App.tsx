@@ -1514,7 +1514,7 @@ export default function App() {
         onlineGameType !== 'single' ? true : clampedRedBots > 0 || clampedBlueBots > 0,
       redBotCount: onlineGameType !== 'single' ? undefined : clampedRedBots,
       blueBotCount: onlineGameType !== 'single' ? undefined : clampedBlueBots,
-      gameType: onlineGameType,
+      gameType: 'single',
       tournamentSize: 32,
       defaultBotDifficulty,
       botDifficulties: {},
